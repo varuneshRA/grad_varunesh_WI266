@@ -1,0 +1,119 @@
+Layout Maintenance Application
+---------------------------------------
+Types -  Villa, Apartment, Independent House, Open Site
+Total Sites - 35 Sites
+First 10 sites are of 40x60 ft size
+Next 10 sites are of 30x50 ft size
+Last 15 sites are of 30x40 ft size
+Open sites are charged 6Rs/sqft
+Occupied sites are charged 9Rs./sqft
+ 
+Admin - 
+	Can add/edit/remove the owner details and site details
+	Can collect the maintenance and update
+	Can see the pending details of all sites or the specific site
+	Can approve/reject the site owners update about their own sites
+Site Owner -
+	Can only see/update the details of his/her own site (but should be approved by Admin)
+
+
+---------------------------------------------------------------
+menu :
+
+welcome
+choose : admin/site owner
+
+admin -> pass , check it matches or not
+site owner ->  username,pass -> from password table get the owner_id for given username and pass , also check it matches
+
+choose operation to perform :
+for admin:
+add site -> ask all details and create an object , later using database add in table
+edit site -> get site id , ask what to edit and edit it in database
+remove site -> get site id then delete it , if we delete already booked site then show warning
+view any pending approvals -> view database which holds pending approvals and approves it by typing request id
+collect maintenance charge -> mark the owners table maintainance charge as paid.
+
+for owner:
+view details of site -> show all neccessary details from site_table of current owner_id's site and also show with owner_details
+update owner details -> ask new name , phone then add it to request_table with new req_id and new details
+
+
+--------------------------------------------------
+database :
+
+site_table
+
+site_id int
+type varhcar
+size int
+maintenance_charges int
+occupied boolean
+booked boolean
+
+owner table 
+site_id int
+owner_id int
+owner_name varhcar
+owner_phone_no int
+maintenance_paid boolean
+
+request_table
+
+request_id int
+owner_id
+owner_name
+owner_phone
+
+password
+username 
+pass
+owner_id
+--------------------------------------------------
+how to do :
+
+Layout class :
+site id
+type (enum)
+size 
+maintenance charges
+occupied -> t/f 
+booked : t/f
+
+getter for all variables
+
+have diff classes for types - > call construct with defalt values
+
+DOAImplementation for database methods : all methods
+
+DBoperation class implements are overrides :
+add site
+edit site
+remove site
+approve/reject site update
+collect maintenance and update
+pending details -> (find with site id tell booked or not)
+request for update done by owner (approval for admin)
+
+
+singleton early instialization - admin object
+user - admin , site owner 
+login system 
+
+// --- SINGLETON CONNECTION HELPER ---
+class DBConnectionHelper {
+	private static Connection connection = null;
+	private static final String URL = "jdbc:postgresql://localhost:5433/data";
+	private static final String USER = "postgres";
+	private static final String PASS = "root";
+
+	private DBConnectionHelper() {
+	}
+
+	public static Connection getConnection() throws SQLException {
+		if (connection == null || connection.isClosed()) {
+			connection = DriverManager.getConnection(URL, USER, PASS);
+		}
+		return connection;
+	}
+}
