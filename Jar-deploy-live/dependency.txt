@@ -1,0 +1,5 @@
+<dependency>
+<groupId>io.github.varuneshra</groupId>
+<artifactId>utility-lib</artifactId>
+<version>1.0.0</version>
+</dependency>
