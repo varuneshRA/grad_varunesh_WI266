@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR BANK | Premium Digital Banking</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary-navy: #1A237E;
+            --secondary-navy: #0D47A1;
+            --accent-silver: #E0E0E0;
+            --light-bg: #F8F9FA;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background-color: var(--primary-navy);
+            min-height: 100vh;
+            color: white;
+            position: fixed;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent-silver);
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 0;
+            transition: 0.3s;
+        }
+
+        .mobile-header {
+            background-color: var(--primary-navy);
+            display: none;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+            background: white;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .auth-card {
+            max-width: 450px;
+            margin: 2rem auto;
+            border-top: 5px solid var(--primary-navy);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); width: 0; }
+            .main-content { margin-left: 0; }
+            .mobile-header { display: flex; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark mobile-header sticky-top p-3 d-lg-none">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#" onclick="updateView('home')">VR BANK</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mobileNav">
+                <div class="navbar-nav pt-3">
+                    <a class="nav-link" onclick="updateView('home')">HOME</a>
+                    <a class="nav-link" onclick="updateView('about')">ABOUT US</a>
+                    <a class="nav-link" onclick="updateView('services')">SERVICES</a>
+                    <a class="nav-link" onclick="updateView('netbanking')">NETBANKING</a>
+                    <a class="nav-link" onclick="updateView('contact')">CONTACT</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <nav class="col-lg-2 sidebar d-none d-lg-block shadow">
+                <div class="p-4 border-bottom border-white border-opacity-10 text-center">
+                    <h3 class="fw-bold m-0 cursor-pointer" onclick="updateView('home')">VR BANK</h3>
+                    <small class="opacity-50">Trusted Since 1990</small>
+                </div>
+                <div class="mt-4">
+                    <a id="nav-home" class="nav-link active" onclick="updateView('home')"><i class="bi bi-house-door"></i> HOME</a>
+                    <a id="nav-about" class="nav-link" onclick="updateView('about')"><i class="bi bi-bank"></i> ABOUT US</a>
+                    <a id="nav-services" class="nav-link" onclick="updateView('services')"><i class="bi bi-grid"></i> SERVICES</a>
+                    <a id="nav-netbanking" class="nav-link" onclick="updateView('netbanking')"><i class="bi bi-shield-lock"></i> NETBANKING</a>
+                    <a id="nav-contact" class="nav-link" onclick="updateView('contact')"><i class="bi bi-headset"></i> CONTACT US</a>
+                </div>
+            </nav>
+
+            <main class="col-lg-10 main-content d-flex flex-column min-vh-100">
+                <header class="bg-white p-4 shadow-sm mb-4 d-none d-lg-flex justify-content-between align-items-center">
+                    <h5 class="m-0 fw-bold text-muted" id="page-title">Welcome to your Portal</h5>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2">Secure 256-bit SSL</span>
+                        <div class="rounded-circle bg-light p-2"><i class="bi bi-person-circle fs-4"></i></div>
+                    </div>
+                </header>
+
+                <div class="container-fluid px-lg-5 flex-grow-1" id="main-display">
+                    <div class="row align-items-center mt-lg-5 animate-fade-in">
+                        <div class="col-md-7">
+                            <h1 class="display-4 fw-bold text-primary mb-3">Seamless Digital Banking</h1>
+                            <p class="lead text-muted mb-4">Your wealth, our priority. Experience the future of secure transactions and personalized financial services.</p>
+                            <button class="btn btn-primary btn-lg px-5 py-3 shadow-sm rounded-pill" onclick="updateView('services')">Explore Services</button>
+                        </div>
+                        <div class="col-md-5 d-none d-md-block text-center">
+                            <div class="p-5 bg-white rounded-circle shadow-lg d-inline-block">
+                                <i class="bi bi-phone-vibrate text-primary" style="font-size: 6rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="mt-auto py-4 text-center">
+                    <div class="container">
+                        <p class="mb-1 fw-bold text-primary">www.vrbank.com</p>
+                        <p class="mb-0 small text-muted">&copy; 2026 VR BANK. All rights reserved. Member FDIC.</p>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /** * View Controller 
+         * Manages SPA content swapping and UI state
+         */
+        function updateView(page) {
+            const display = document.getElementById('main-display');
+            const pageTitle = document.getElementById('page-title');
+
+            // Update Active Link UI
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${page}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            let html = '';
+
+            switch (page) {
+                case 'home':
+                    pageTitle.innerText = "Welcome to your Portal";
+                    html = `
+                    <div class="row align-items-center mt-lg-5 animate-fade-in">
+                        <div class="col-md-7">
+                            <h1 class="display-4 fw-bold text-primary mb-3">Seamless Digital Banking</h1>
+                            <p class="lead text-muted mb-4">Your wealth, our priority. Experience the future of secure transactions.</p>
+                            <button class="btn btn-primary btn-lg px-5 py-3 shadow-sm rounded-pill" onclick="updateView('services')">Explore Services</button>
+                        </div>
+                        <div class="col-md-5 d-none d-md-block text-center">
+                            <div class="p-5 bg-white rounded-circle shadow-lg d-inline-block">
+                                <i class="bi bi-phone-vibrate text-primary" style="font-size: 6rem;"></i>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'about':
+                    pageTitle.innerText = "About Our Heritage";
+                    html = `
+                    <div class="card card-custom p-5 animate-fade-in">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="fw-bold text-primary">Serving Since 1990</h2>
+                                <p class="lead mt-3">At VR BANK, we combine decades of banking excellence with cutting-edge digital technology.</p>
+                                <div class="row mt-4 g-3 text-center">
+                                    <div class="col-4 border-end"><h5>35+</h5><small class="text-muted">Years</small></div>
+                                    <div class="col-4 border-end"><h5>12M+</h5><small class="text-muted">Users</small></div>
+                                    <div class="col-4"><h5>A+++</h5><small class="text-muted">Rating</small></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center d-none d-md-block">
+                                <i class="bi bi-award text-primary display-1"></i>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'services':
+                    pageTitle.innerText = "Our Financial Products";
+                    html = `
+                    <div class="animate-fade-in">
+                        <h2 class="fw-bold mb-4">Banking Services</h2>
+                        <div class="row g-4">
+                            <div class="col-md-4" onclick="updateView('loan')">
+                                <div class="card card-custom p-4 h-100 shadow-sm pointer">
+                                    <i class="bi bi-calculator fs-2 text-primary mb-3"></i>
+                                    <h5>Loan EMI Calculator</h5>
+                                    <p class="text-muted small">Calculate installments for Home, Car, and Personal loans instantly.</p>
+                                    <span class="text-primary fw-bold small">Check Eligibility <i class="bi bi-arrow-right"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4" onclick="updateView('deposits')">
+                                <div class="card card-custom p-4 h-100 shadow-sm pointer">
+                                    <i class="bi bi-piggy-bank fs-2 text-success mb-3"></i>
+                                    <h5>Deposit Schemes</h5>
+                                    <p class="text-muted small">Earn high yields with FD, RD, and Tax Saver schemes.</p>
+                                    <span class="text-success fw-bold small">Invest Now <i class="bi bi-arrow-right"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4" onclick="updateView('open-account')">
+                                <div class="card card-custom p-4 h-100 shadow-sm pointer">
+                                    <i class="bi bi-credit-card fs-2 text-danger mb-3"></i>
+                                    <h5>Credit Cards</h5>
+                                    <p class="text-muted small">Premium cards with lounge access and unlimited rewards.</p>
+                                    <span class="text-danger fw-bold small">Apply Now <i class="bi bi-arrow-right"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'deposits':
+                    pageTitle.innerText = "Investment & Deposits";
+                    html = `
+                    <div class="row justify-content-center animate-fade-in">
+                        <div class="col-md-6 col-lg-5">
+                            <div class="card card-custom p-4 shadow-lg border-top border-4 border-success">
+                                <div class="text-center mb-4">
+                                    <h3 class="fw-bold text-success">Deposit Schemes</h3>
+                                    <p class="text-muted small">Grow your wealth with guaranteed returns</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">INVESTMENT SCHEME</label>
+                                    <select id="scheme" class="form-select bg-light">
+                                        <option>Fixed Deposit (FD)</option>
+                                        <option>Recurring Deposit (RD)</option>
+                                        <option>Tax Saver Deposit</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold">DEPOSIT AMOUNT (₹)</label>
+                                    <input type="number" id="depAmount" class="form-control bg-light" placeholder="Min. 1000">
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success fw-bold py-2" onclick="processDeposit()">CREATE DEPOSIT</button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="updateView('services')">BACK TO SERVICES</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'loan':
+                    pageTitle.innerText = "Loan EMI Calculator";
+                    html = `
+                    <div class="row justify-content-center animate-fade-in">
+                        <div class="col-lg-10">
+                            <div class="card card-custom p-4 p-md-5">
+                                <div class="row g-5">
+                                    <div class="col-md-6 border-end">
+                                        <h4 class="fw-bold text-primary mb-4"><i class="bi bi-calculator me-2"></i>Calculate EMI</h4>
+                                        <form id="loanForm" name="loanForm">
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold text-muted">APPLICANT NAME</label>
+                                                <input type="text" id="applicant" class="form-control bg-light py-2 shadow-sm" placeholder="Full Name">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold text-muted">LOAN CATEGORY</label>
+                                                <select name="loanType" class="form-select bg-light py-2 shadow-sm" onchange="updateInterest()">
+                                                    <option value="">-- Select Category --</option>
+                                                    <option value="HOME">HOME LOAN (9%)</option>
+                                                    <option value="CAR">CAR LOAN (12%)</option>
+                                                    <option value="PERSONAL">PERSONAL LOAN (15%)</option>
+                                                </select>
+                                            </div>
+                                            <div class="row mb-3 g-2">
+                                                <div class="col-6">
+                                                    <label class="form-label small fw-bold text-muted">RATE (%)</label>
+                                                    <input type="text" name="interest" class="form-control bg-white" readonly placeholder="Rate">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label small fw-bold text-muted">TENURE (YRS)</label>
+                                                    <input type="number" name="duration" class="form-control bg-light shadow-sm" placeholder="Years">
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label small fw-bold text-muted">LOAN AMOUNT (₹)</label>
+                                                <input type="number" name="amount" class="form-control bg-light py-2 shadow-sm" placeholder="e.g. 500000">
+                                            </div>
+                                            <div class="d-grid gap-2">
+                                                <button type="button" class="btn btn-primary py-2 fw-bold" onclick="calculateEMI()">CALCULATE NOW</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateView('services')">Return to Services</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                                        <div class="p-4 rounded-circle bg-success bg-opacity-10 border border-success border-opacity-25 mx-auto mb-4 d-flex flex-column justify-content-center" style="width: 220px; height: 220px;">
+                                            <h6 class="text-success fw-bold small mb-1">MONTHLY EMI</h6>
+                                            <h2 class="text-success fw-bold mb-0" id="emiResultDisplay">₹ 0.00</h2>
+                                        </div>
+                                        <div class="bg-light p-3 rounded-3 text-start small border shadow-sm">
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span class="text-muted">Total Interest:</span>
+                                                <span class="fw-bold" id="totalInterest">₹ 0.00</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="text-muted">Total Repayment:</span>
+                                                <span class="fw-bold" id="totalPayment">₹ 0.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'netbanking':
+                    html = `
+                    <div class="card card-custom auth-card shadow-lg mx-auto p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-shield-lock-fill text-primary display-5"></i>
+                            <h3 class="fw-bold mt-2">Secure Login</h3>
+                        </div>
+                        <form onsubmit="return validateAuth('login')">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">USERNAME</label>
+                                <input type="text" id="un" class="form-control bg-light py-2" placeholder="User ID">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-muted">PASSWORD</label>
+                                <input type="password" id="pwd" class="form-control bg-light py-2" placeholder="••••••••">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary py-2 fw-bold">SIGN IN</button>
+                                <button type="reset" class="btn btn-light py-2 border">CLEAR</button>
+                            </div>
+                        </form>
+                        <p class="text-center mt-4 mb-0 small">New user? <a href="#" onclick="showSignup()" class="text-primary text-decoration-none fw-bold">Register Now</a></p>
+                    </div>`;
+                    break;
+
+                case 'contact':
+                    pageTitle.innerText = "24/7 Support Center";
+                    html = `
+                    <div class="row g-4 animate-fade-in">
+                        <div class="col-md-6">
+                            <div class="card card-custom p-4 bg-primary text-white h-100 shadow">
+                                <h5>Global Helpline</h5>
+                                <div class="d-flex align-items-center gap-3 mb-3 mt-3">
+                                    <i class="bi bi-telephone fs-3"></i>
+                                    <span class="fs-5">1800-456-VRBANK</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-3">
+                                    <i class="bi bi-envelope fs-3"></i>
+                                    <span>support@vrbank.com</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card card-custom p-4 h-100 border shadow-sm">
+                                <h5 class="text-primary fw-bold">Visit Our Branch</h5>
+                                <p class="text-muted">Silicon Valley Corporate Tower 1, California, US</p>
+                                <hr>
+                                <p class="small text-muted"><i class="bi bi-clock me-2"></i>Mon-Fri: 9:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'open-account':
+                    pageTitle.innerText = "Digital Onboarding";
+                    html = `
+                    <div class="row justify-content-center animate-fade-in">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-lg border-0" style="border-radius: 12px; overflow: hidden;">
+                                <div class="p-4 text-center text-white" style="background: var(--primary-navy);">
+                                    <h3 class="m-0">Open Account</h3>
+                                </div>
+                                <div class="card-body p-4 bg-white">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small">FULL NAME</label>
+                                        <input type="text" id="fullName" class="form-control" placeholder="Legal Name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small">PAN CARD</label>
+                                        <input type="text" id="pan" class="form-control text-uppercase" maxlength="10">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold small">MOBILE</label>
+                                        <input type="text" id="mobile" class="form-control" maxlength="10">
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary fw-bold py-2" onclick="validateAccount()">OPEN ACCOUNT</button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="updateView('home')">CANCEL</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+            }
+
+            display.innerHTML = html;
+        }
+
+        // --- Business Logic Functions (Keeping existing logic intact) ---
+        
+        function processDeposit() {
+            let amount = document.getElementById('depAmount').value;
+            if (amount < 1000) { alert("Security Note: Min. deposit is ₹1,000."); return; }
+            alert("Success: Deposit initiated successfully!");
+            updateView('home');
+        }
+
+        function updateInterest() {
+            let type = document.loanForm.loanType.value;
+            let rates = { HOME: 9, CAR: 12, PERSONAL: 15 };
+            document.loanForm.interest.value = rates[type] || "";
+        }
+
+        function calculateEMI() {
+            let name = document.getElementById("applicant").value;
+            let rate = parseFloat(document.loanForm.interest.value);
+            let amount = parseFloat(document.loanForm.amount.value);
+            let years = parseFloat(document.loanForm.duration.value);
+
+            if (name.length < 5 || isNaN(amount) || isNaN(years)) { alert("Check inputs."); return; }
+
+            let r = rate / (12 * 100);
+            let n = years * 12;
+            let emi = (amount * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+
+            const fmt = (v) => "₹ " + v.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+            document.getElementById("emiResultDisplay").innerText = fmt(emi);
+            document.getElementById("totalInterest").innerText = fmt((emi * n) - amount);
+            document.getElementById("totalPayment").innerText = fmt(emi * n);
+        }
+
+        function validateAuth() {
+            if (document.getElementById('un').value === "" || document.getElementById('pwd').value === "") alert("Required fields missing.");
+            else alert("Secure Access Granted.");
+        }
+
+        function validateAccount() {
+            let name = document.getElementById('fullName').value;
+            let pan = document.getElementById('pan').value;
+            let mob = document.getElementById('mobile').value;
+
+            if (name.length < 5 || pan.length !== 10 || mob.length !== 10) { alert("Validation Error."); return; }
+            alert("Application submitted! Reference ID: OB-" + Math.floor(100000 + Math.random() * 900000));
+            updateView('home');
+        }
+
+        function showSignup() {
+            document.getElementById('main-display').innerHTML = `
+            <div class="card card-custom auth-card shadow-lg mx-auto p-4 p-md-5">
+                <h3 class="fw-bold text-center mb-4">Create Account</h3>
+                <form onsubmit="return validateAuth('signup')">
+                    <input type="text" class="form-control mb-3 py-2" placeholder="Full Name">
+                    <input type="text" id="un" class="form-control mb-3 py-2" placeholder="Choose Username">
+                    <input type="email" class="form-control mb-3 py-2" placeholder="Email Address">
+                    <input type="password" id="pwd" class="form-control mb-4 py-2" placeholder="Password (Min 6 chars)">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary py-2 fw-bold">JOIN NOW</button>
+                        <button type="button" class="btn btn-link text-muted" onclick="updateView('netbanking')">Back to Login</button>
+                    </div>
+                </form>
+            </div>`;
+        }
+        
+    </script>
+</body>
+</html>
