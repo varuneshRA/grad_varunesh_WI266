@@ -1,0 +1,95 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm px-4">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">🎓 StudentManager</a>
+    <div class="d-flex align-items-center">
+      <span class="text-white me-3 badge bg-info">{{ isAdmin ? 'Admin Mode' : 'Staff Mode' }}</span>
+      <button class="btn btn-light btn-sm fw-bold" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid mt-4 px-4">
+  <div class="row">
+    
+    <div class="col-lg-4 mb-4" *ngIf="isAdmin">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0 fw-bold">{{ isEditMode ? 'Edit Student Details' : 'Register New Student' }}</h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveStudent()">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Registration Number</label>
+              <input [(ngModel)]="currentStudent.regNo" name="regNo" class="form-control" [disabled]="isEditMode" required>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label class="form-label small fw-bold">Roll No</label>
+                <input [(ngModel)]="currentStudent.rollNo" name="rollNo" class="form-control" required>
+              </div>
+              <div class="col">
+                <label class="form-label small fw-bold">Standard</label>
+                <input [(ngModel)]="currentStudent.standard" name="standard" class="form-control" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Full Name</label>
+              <input [(ngModel)]="currentStudent.name" name="name" class="form-control" required>
+            </div>
+            <div class="mb-4">
+              <label class="form-label small fw-bold">School Name</label>
+              <input [(ngModel)]="currentStudent.school" name="school" class="form-control" required>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success fw-bold">
+                {{ isEditMode ? 'Update Record' : 'Add Student' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" (click)="resetForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div [ngClass]="isAdmin ? 'col-lg-8' : 'col-lg-12'">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">Student Records</h5>
+          <span class="badge bg-secondary">{{ students.length }} Total Students</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-4">Reg No</th>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Standard</th>
+                <th>School</th>
+                <th *ngIf="isAdmin" class="text-end pe-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of students">
+                <td class="ps-4 fw-bold text-primary">{{ s.regNo }}</td>
+                <td>{{ s.rollNo }}</td>
+                <td>{{ s.name }}</td>
+                <td><span class="badge rounded-pill bg-light text-dark border">{{ s.standard }}</span></td>
+                <td>{{ s.school }}</td>
+                <td *ngIf="isAdmin" class="text-end pe-4">
+                  <button class="btn btn-outline-warning btn-sm me-2" (click)="editStudent(s)">Edit</button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="deleteStudent(s.regNo)">Delete</button>
+                </td>
+              </tr>
+              <tr *ngIf="students.length === 0">
+                <td colspan="6" class="text-center py-5 text-muted">No student records found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
