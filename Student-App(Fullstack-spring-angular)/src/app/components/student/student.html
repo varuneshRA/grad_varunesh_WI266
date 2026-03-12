@@ -1,0 +1,152 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card bg-dark text-white shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <h4 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Student Management System</h4>
+          <span class="badge bg-primary">Academic Year 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header" [ngClass]="isEdit ? 'bg-info text-white' : 'bg-primary text-white'">
+          <h5 class="mb-0">
+            <i class="fas" [ngClass]="isEdit ? 'fa-edit' : 'fa-plus-circle'"></i> 
+            {{ isEdit ? 'Update Student' : 'Register New Student' }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-12 mb-2">
+                <label class="form-label fw-bold small">Registration No</label>
+                <input type="number" name="regno" [(ngModel)]="currentStudent.regno" class="form-control" [disabled]="isEdit" placeholder="Unique ID">
+              </div>
+              <div class="col-md-12 mb-2">
+                <label class="form-label fw-bold small">Full Name</label>
+                <input type="text" name="name" [(ngModel)]="currentStudent.name" class="form-control" required placeholder="Enter name">
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-bold small">Roll No</label>
+                <input type="number" name="rollno" [(ngModel)]="currentStudent.rollno" class="form-control">
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-bold small">Standard</label>
+                <input type="number" name="std" [(ngModel)]="currentStudent.standard" class="form-control">
+              </div>
+              <div class="col-12 mb-2">
+                <label class="form-label fw-bold small">School Name</label>
+                <input type="text" name="school" [(ngModel)]="currentStudent.school" class="form-control" placeholder="Assign School">
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-bold small">Gender</label>
+                <select name="gender" [(ngModel)]="currentStudent.gender" class="form-select">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label fw-bold small">Percentage (%)</label>
+                <input type="number" name="perc" [(ngModel)]="currentStudent.percentage" class="form-control">
+              </div>
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn" [ngClass]="isEdit ? 'btn-info text-white' : 'btn-primary'">
+                {{ isEdit ? 'Update Record' : 'Save Student' }}
+              </button>
+              <button type="button" (click)="resetForm()" class="btn btn-outline-secondary btn-sm">Clear Form</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body py-2">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0" placeholder="Filter by school..." [(ngModel)]="searchSchool">
+                <button class="btn btn-primary" (click)="filterBySchool()">Search</button>
+              </div>
+            </div>
+            <div class="col-md-6 text-end">
+              <div class="btn-group shadow-sm">
+                <button class="btn btn-outline-success border-2" (click)="filterByResult(true)">Pass</button>
+                <button class="btn btn-outline-danger border-2" (click)="filterByResult(false)">Fail</button>
+                <button class="btn btn-outline-secondary border-2" (click)="loadAll()">Show All</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 overflow-hidden">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th class="ps-3">RegNo</th>
+              <th>Student Details</th>
+              <th class="text-center">Std</th>
+              <th class="text-center">Grade</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of students">
+              <td class="ps-3 fw-bold">{{ s.regno }}</td>
+              <td>
+                <div class="fw-bold">{{ s.name }}</div>
+                <div class="small text-muted"><i class="fas fa-school me-1"></i>{{ s.school }}</div>
+              </td>
+              <td class="text-center">{{ s.standard }}</td>
+              <td class="text-center">
+                <span [class]="s.percentage >= 40 ? 'badge bg-success' : 'badge bg-danger'" style="min-width: 50px;">
+                  {{ s.percentage }}%
+                </span>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-light border me-2" (click)="editStudent(s)" title="Edit"><i class="fas fa-edit text-info"></i></button>
+                <button class="btn btn-sm btn-light border" (click)="deleteStudent(s.regno)" title="Delete"><i class="fas fa-trash text-danger"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+          <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body">
+              <h6 class="text-muted small text-uppercase fw-bold"><i class="fas fa-layer-group me-2"></i>Standard Count</h6>
+              <div class="d-flex mt-2">
+                <input type="number" class="form-control form-control-sm me-2" [(ngModel)]="stdToCount" placeholder="Std">
+                <button class="btn btn-sm btn-info text-white" (click)="fetchStandardCount()">Check</button>
+              </div>
+              <div class="mt-2 fw-bold text-info" *ngIf="stdCountResult !== null">Result: {{ stdCountResult }} students</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body">
+              <h6 class="text-muted small text-uppercase fw-bold"><i class="fas fa-university me-2"></i>School Capacity</h6>
+              <div class="d-flex mt-2">
+                <input type="text" class="form-control form-control-sm me-2" [(ngModel)]="countBySchoolName" placeholder="School Name">
+                <button class="btn btn-sm btn-info text-white" (click)="fetchSchoolCount(countBySchoolName)">Check</button>
+              </div>
+              <div class="mt-2 fw-bold text-info" *ngIf="schoolCountResult !== null">Result: {{ schoolCountResult }} students</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

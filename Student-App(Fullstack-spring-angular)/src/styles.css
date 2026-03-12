@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #f4f7f6; /* A soft light grey for a dashboard feel */
+  padding-top: 20px;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
